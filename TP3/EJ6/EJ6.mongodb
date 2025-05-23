@@ -1,0 +1,35 @@
+db.ventas.aggregate([
+{
+    $project: {
+    mes: { $month: "$fecha" },
+    total: 1
+    }
+},
+{
+    $group: {
+    _id: "$mes",
+    total_vendido: { $sum: "$total" }
+    }
+},
+{
+    $sort: { _id: 1 }
+}
+])
+
+db.ventas.aggregate([
+{
+    $project: {
+    dia_semana: { $dayOfWeek: "$fecha" },
+    total: 1
+    }
+},
+{
+    $group: {
+    _id: "$dia_semana",
+    total_vendido: { $sum: "$total" }
+    }
+},
+{
+    $sort: { total_vendido: -1 }
+}
+])
