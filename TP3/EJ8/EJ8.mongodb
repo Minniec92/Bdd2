@@ -1,42 +1,53 @@
-db.ventas.aggregate([
+// Clientes
+db.clientes.insertMany([
+{ _id: ObjectId("64abf1234a1b2c3d4e5f6789"), nombre: "Empresa A", email: "contacto@empresaA.com" },
+{ _id: ObjectId("64abf1234a1b2c3d4e5f6790"), nombre: "Empresa B", email: "info@empresaB.com" },
+{ _id: ObjectId("64abf1234a1b2c3d4e5f6791"), nombre: "Empresa C", email: "ventas@empresaC.com" }
+]);
+
+// Pedidos
+db.pedidos.insertMany([
 {
-    $group: {
-    _id: "$producto_id",
-    unidades_vendidas: { $sum: "$cantidad" },
-    monto_total: { $sum: "$total" }
-    }
+    _id: ObjectId(),
+    fecha: ISODate("2025-04-01T10:00:00Z"),
+    cliente_id: ObjectId("64abf1234a1b2c3d4e5f6789"),
+    productos: [
+    { producto: "Teclado", precio: 50.0, cantidad: 2 },
+    { producto: "Mouse",   precio: 20.0, cantidad: 1 }
+    ]
 },
 {
-    $sort: { unidades_vendidas: -1 }
+    _id: ObjectId(),
+    fecha: ISODate("2025-04-02T14:30:00Z"),
+    cliente_id: ObjectId("64abf1234a1b2c3d4e5f6789"),
+    productos: [
+    { producto: "Monitor", precio: 150.0, cantidad: 1 }
+    ]
 },
 {
-    $limit: 3
+    _id: ObjectId(),
+    fecha: ISODate("2025-04-03T09:15:00Z"),
+    cliente_id: ObjectId("64abf1234a1b2c3d4e5f6790"),
+    productos: [
+    { producto: "Impresora", precio: 200.0, cantidad: 1 },
+    { producto: "Tóner",    precio: 40.0, cantidad: 3 }
+    ]
 },
 {
-    $lookup: {
-    from: "productos",
-    localField: "_id",
-    foreignField: "_id",
-    as: "producto"
-    }
+    _id: ObjectId(),
+    fecha: ISODate("2025-04-05T11:00:00Z"),
+    cliente_id: ObjectId("64abf1234a1b2c3d4e5f6791"),
+    productos: [
+    { producto: "Cámara",  precio: 350.0, cantidad: 1 },
+    { producto: "Trípode", precio: 80.0,  cantidad: 1 }
+    ]
 },
 {
-    $unwind: "$producto"
-},
-{
-    $unwind: "$producto.valoraciones"
-},
-{
-    $group: {
-    _id: "$_id",
-    nombre: { $first: "$producto.nombre" },
-    categoria: { $first: "$producto.categoria" },
-    unidades_vendidas: { $first: "$unidades_vendidas" },
-    monto_total: { $first: "$monto_total" },
-    promedio_valoracion: { $avg: "$producto.valoraciones.puntuacion" }
-    }
-},
-{
-    $sort: { unidades_vendidas: -1 }
+    _id: ObjectId(),
+    fecha: ISODate("2025-04-06T16:45:00Z"),
+    cliente_id: ObjectId("64abf1234a1b2c3d4e5f6790"),
+    productos: [
+    { producto: "USB Drive", precio: 15.0, cantidad: 5 }
+    ]
 }
-])
+]);
