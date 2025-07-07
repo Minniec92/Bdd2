@@ -1,3 +1,4 @@
+/ tp1 
 # Ejercicio 1: Reglas de Integridad
 
 Tenemos una base de datos universitaria con las tablas `estudiantes` y `matriculas`
